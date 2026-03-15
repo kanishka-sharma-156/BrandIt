@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BRANDIT – Brands & Clients</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">B</div>
+      <div>
+        <div class="logo-text">BRANDIT</div>
+        <div class="logo-sub">Brand Management</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <span class="nav-section-label">Main</span>
+      <a href="dashboard.html" class="nav-link">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </a>
+      <a href="brands.html" class="nav-link active">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+        Brands & Clients
+      </a>
+      <a href="calendar.html" class="nav-link">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Calendar
+      </a>
+      <a href="tasks.html" class="nav-link">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Tasks
+      </a>
+      <a href="team.html" class="nav-link">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        Team
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="avatar" id="sidebarAvatar">AJ</div>
+        <div class="user-info" style="flex:1;">
+          <div class="user-name" id="sidebarName">Alex Johnson</div>
+          <div class="user-role" id="sidebarRole">Admin</div>
+        </div>
+        <svg onclick="logout()" title="Logout" style="margin-left:auto;color:var(--muted);width:16px;height:16px;cursor:pointer;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── TOPBAR ── -->
+  <header class="topbar">
+    <div class="topbar-title">
+      Brands & Clients
+      <span>Manage all your client brands</span>
+    </div>
+    <div class="search-bar">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" placeholder="Search brands..." id="brandSearch" oninput="filterBrands()" />
+    </div>
+    <div class="topbar-actions">
+      <div class="avatar sm" id="topbarAvatar" style="cursor:pointer;">AJ</div>
+    </div>
+  </header>
+
+  <!-- ── MAIN ── -->
+  <main class="main-content">
+
+    <!-- STATS -->
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card purple">
+        <div class="stat-icon-bg purple">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+        </div>
+        <div class="stat-label">Total Brands</div>
+        <div class="stat-value" id="statTotal">0</div>
+        <div class="stat-change up">All clients</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-icon-bg green">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="stat-label">Active</div>
+        <div class="stat-value" id="statActive">0</div>
+        <div class="stat-change up">Currently running</div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-icon-bg amber">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="stat-label">In Review</div>
+        <div class="stat-value" id="statReview">0</div>
+        <div class="stat-change down">Needs attention</div>
+      </div>
+      <div class="stat-card pink">
+        <div class="stat-icon-bg pink">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        </div>
+        <div class="stat-label">Paused</div>
+        <div class="stat-value" id="statPaused">0</div>
+        <div class="stat-change down">On hold</div>
+      </div>
+    </div>
+
+    <!-- FILTER + ADD -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm filter-tab" onclick="filterTab(this,'all')">All Brands</button>
+        <button class="btn btn-outline btn-sm filter-tab" onclick="filterTab(this,'active')">Active</button>
+        <button class="btn btn-outline btn-sm filter-tab" onclick="filterTab(this,'review')">In Review</button>
+        <button class="btn btn-outline btn-sm filter-tab" onclick="filterTab(this,'paused')">Paused</button>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <div style="display:flex;background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+          <button id="gridViewBtn" onclick="setView('grid')" style="padding:7px 12px;background:var(--gradient);border:none;color:white;cursor:pointer;font-size:13px;font-family:inherit;">⊞ Grid</button>
+          <button id="listViewBtn" onclick="setView('list')" style="padding:7px 12px;background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:13px;font-family:inherit;">≡ List</button>
+        </div>
+        <button class="btn btn-primary" onclick="openModal()">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Brand
+        </button>
+      </div>
+    </div>
+
+    <!-- LOADING -->
+    <div id="loadingState" style="text-align:center;padding:60px;color:var(--muted);">
+      <div style="width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;"></div>
+      Loading brands...
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div id="emptyState" style="display:none;text-align:center;padding:60px;">
+      <div style="font-size:48px;margin-bottom:16px;">📦</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:8px;">No brands yet</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:24px;">Add your first client brand to get started</div>
+      <button class="btn btn-primary" onclick="openModal()">+ Add First Brand</button>
+    </div>
+
+    <!-- GRID VIEW -->
+    <div id="gridView" class="grid-auto" style="display:none;"></div>
+
+    <!-- LIST VIEW -->
+    <div id="listView" style="display:none;">
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Brand</th>
+                <th>Industry</th>
+                <th>Platforms</th>
+                <th>Manager</th>
+                <th>Target</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="listBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── ADD / EDIT BRAND MODAL ── -->
+<div id="modalOverlay" onclick="closeModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;"></div>
+<div id="brandModal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--dark);border:1px solid var(--border);border-radius:16px;padding:32px;width:540px;max-width:95vw;z-index:201;max-height:90vh;overflow-y:auto;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+    <div>
+      <h2 id="modalTitle" style="font-size:18px;font-weight:700;">Add New Brand</h2>
+      <p style="font-size:13px;color:var(--muted);margin-top:4px;">Fill in the details below</p>
+    </div>
+    <button onclick="closeModal()" style="background:var(--card);border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;">✕</button>
+  </div>
+  <form onsubmit="submitBrand(event)" id="brandForm">
+    <input type="hidden" id="editBrandId" value="" />
+    <div class="grid-2">
+      <div class="form-group">
+        <label class="form-label">Brand Name *</label>
+        <input class="form-input" type="text" id="brandName" placeholder="e.g. NovaTech" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Industry</label>
+        <select class="form-input" id="brandIndustry">
+          <option value="">Select industry</option>
+          <option>Technology & SaaS</option>
+          <option>Fashion & Lifestyle</option>
+          <option>Food & Beverage</option>
+          <option>Health & Wellness</option>
+          <option>Media & Entertainment</option>
+          <option>Eco & Sustainability</option>
+          <option>Luxury Fashion</option>
+          <option>Education</option>
+          <option>Finance</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Brand Description</label>
+      <textarea class="form-input" id="brandDesc" rows="3" placeholder="Brief description of this brand..."></textarea>
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label class="form-label">Monthly Post Target</label>
+        <input class="form-input" type="number" id="brandTarget" placeholder="e.g. 40" min="1" value="30" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="form-input" id="brandStatus">
+          <option value="active">Active</option>
+          <option value="review">In Review</option>
+          <option value="paused">Paused</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Brand Color</label>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;">
+        <div class="color-opt" onclick="selectColor(this,'linear-gradient(135deg,#7C3AED,#EC4899)')" style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#7C3AED,#EC4899);cursor:pointer;border:3px solid white;"></div>
+        <div class="color-opt" onclick="selectColor(this,'linear-gradient(135deg,#F59E0B,#EF4444)')" style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#F59E0B,#EF4444);cursor:pointer;border:3px solid transparent;"></div>
+        <div class="color-opt" onclick="selectColor(this,'linear-gradient(135deg,#10B981,#3B82F6)')" style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#10B981,#3B82F6);cursor:pointer;border:3px solid transparent;"></div>
+        <div class="color-opt" onclick="selectColor(this,'linear-gradient(135deg,#3B82F6,#8B5CF6)')" style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#3B82F6,#8B5CF6);cursor:pointer;border:3px solid transparent;"></div>
+        <div class="color-opt" onclick="selectColor(this,'linear-gradient(135deg,#EC4899,#F59E0B)')" style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#EC4899,#F59E0B);cursor:pointer;border:3px solid transparent;"></div>
+        <div class="color-opt" onclick="selectColor(this,'linear-gradient(135deg,#EF4444,#7C3AED)')" style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#EF4444,#7C3AED);cursor:pointer;border:3px solid transparent;"></div>
+      </div>
+      <input type="hidden" id="brandGradient" value="linear-gradient(135deg,#7C3AED,#EC4899)" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Social Media Platforms</label>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;">
+        <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;"><input type="checkbox" class="platform-check" value="IG" style="accent-color:var(--primary);" /> Instagram</label>
+        <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;"><input type="checkbox" class="platform-check" value="TK" style="accent-color:var(--primary);" /> TikTok</label>
+        <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;"><input type="checkbox" class="platform-check" value="LI" style="accent-color:var(--primary);" /> LinkedIn</label>
+        <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;"><input type="checkbox" class="platform-check" value="FB" style="accent-color:var(--primary);" /> Facebook</label>
+        <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:13px;"><input type="checkbox" class="platform-check" value="TW" style="accent-color:var(--primary);" /> Twitter / X</label>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:8px;">
+      <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button type="submit" id="submitBtn" class="btn btn-primary">Add Brand</button>
+    </div>
+  </form>
+</div>
+
+<style>
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .color-opt:hover { transform: scale(1.15); transition: transform 0.15s; }
+</style>
+
+<script>
+  const API = 'http://localhost:5000/api';
+  let allBrands    = [];
+  let activeFilter = 'all';
+  let activeSearch = '';
+  let currentView  = 'grid';
+  let selectedGradient = 'linear-gradient(135deg,#7C3AED,#EC4899)';
+
+  // ── LOAD USER ──
+  const user = JSON.parse(localStorage.getItem('brandit_user') || '{}');
+  if (!user.name) window.location.href = 'login.html';
+  document.getElementById('sidebarName').textContent  = user.name;
+  document.getElementById('sidebarRole').textContent  = user.role || 'Member';
+  document.getElementById('sidebarAvatar').textContent = user.initials || 'U';
+  document.getElementById('topbarAvatar').textContent  = user.initials || 'U';
+
+  function logout() {
+    localStorage.clear();
+    window.location.href = 'login.html';
+  }
+
+  // ── PLATFORM ICON HTML ──
+  function platformIcon(p) {
+    const map = {
+      IG: 'background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045)',
+      TW: 'background:#1DA1F2',
+      LI: 'background:#0A66C2',
+      FB: 'background:#1877F2',
+      TK: 'background:#010101;border:1px solid #333'
+    };
+    return `<span style="width:26px;height:26px;min-width:26px;border-radius:6px;
+      display:inline-flex;align-items:center;justify-content:center;
+      font-size:9px;font-weight:700;color:white;${map[p] || 'background:#333'};">${p}</span>`;
+  }
+
+  // ── STATUS BADGE ──
+  function statusBadge(s) {
+    const map = {
+      active: 'badge-green',
+      review: 'badge-amber',
+      paused: 'badge-red'
+    };
+    const labels = { active:'Active', review:'In Review', paused:'Paused' };
+    return `<span class="badge ${map[s] || 'badge-blue'}">${labels[s] || s}</span>`;
+  }
+
+  // ── FETCH ALL BRANDS ──
+  async function loadBrands() {
+    try {
+      const res  = await fetch(`${API}/brands`);
+      const data = await res.json();
+      allBrands  = data;
+      updateStats();
+      renderBrands();
+    } catch (err) {
+      document.getElementById('loadingState').innerHTML =
+        `<div style="color:var(--danger);">❌ Could not connect to server. Make sure the backend is running.</div>`;
+    }
+  }
+
+  // ── UPDATE STATS ──
+  function updateStats() {
+    document.getElementById('statTotal').textContent  = allBrands.length;
+    document.getElementById('statActive').textContent = allBrands.filter(b => b.status === 'active').length;
+    document.getElementById('statReview').textContent = allBrands.filter(b => b.status === 'review').length;
+    document.getElementById('statPaused').textContent = allBrands.filter(b => b.status === 'paused').length;
+  }
+
+  // ── RENDER BRANDS ──
+  function renderBrands() {
+    document.getElementById('loadingState').style.display = 'none';
+
+    let filtered = allBrands.filter(b => {
+      const matchFilter = activeFilter === 'all' || b.status === activeFilter;
+      const matchSearch = b.name.toLowerCase().includes(activeSearch) ||
+                          (b.industry || '').toLowerCase().includes(activeSearch);
+      return matchFilter && matchSearch;
+    });
+
+    if (filtered.length === 0) {
+      document.getElementById('emptyState').style.display = 'block';
+      document.getElementById('gridView').style.display   = 'none';
+      document.getElementById('listView').style.display   = 'none';
+      return;
+    }
+
+    document.getElementById('emptyState').style.display = 'none';
+
+    if (currentView === 'grid') {
+      document.getElementById('gridView').style.display = 'grid';
+      document.getElementById('listView').style.display = 'none';
+      renderGrid(filtered);
+    } else {
+      document.getElementById('gridView').style.display = 'none';
+      document.getElementById('listView').style.display = 'block';
+      renderList(filtered);
+    }
+  }
+
+  // ── RENDER GRID ──
+  function renderGrid(brands) {
+    document.getElementById('gridView').innerHTML = brands.map(b => {
+      const platforms = Array.isArray(b.platforms) ? b.platforms.filter(p => p) : [];
+      const initials  = b.initials || b.name.substring(0,2).toUpperCase();
+      return `
+        <div class="brand-card">
+          <div class="brand-card-header" style="background:${b.gradient}22;">
+            <div class="brand-logo" style="background:${b.gradient};">${initials}</div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${b.name}</div>
+              <div class="text-xs text-muted">${b.industry || 'No industry'}</div>
+            </div>
+            <div>${statusBadge(b.status)}</div>
+          </div>
+          <div class="brand-card-body">
+            <div class="text-sm text-muted" style="line-height:1.5;min-height:40px;">
+              ${b.description || 'No description provided.'}
+            </div>
+            <div class="brand-platforms">
+              ${platforms.map(p => platformIcon(p)).join('')}
+              ${platforms.length === 0 ? '<span class="text-xs text-muted">No platforms</span>' : ''}
+            </div>
+            <div style="margin-top:10px;">
+              <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;">
+                <span class="text-muted">Monthly target</span>
+                <span class="font-semibold">${b.post_target || 30} posts</span>
+              </div>
+              <div class="progress-wrap">
+                <div class="progress-fill" style="width:0%;"></div>
+              </div>
+            </div>
+            <div class="brand-meta">
+              <span class="text-xs text-muted">${b.manager_name || 'Unassigned'}</span>
+              <div style="display:flex;gap:8px;">
+                <button class="btn btn-outline btn-sm" onclick="editBrand(${b.id})">Edit</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteBrand(${b.id},'${b.name}')">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ── RENDER LIST ──
+  function renderList(brands) {
+    document.getElementById('listBody').innerHTML = brands.map(b => {
+      const platforms = Array.isArray(b.platforms) ? b.platforms.filter(p => p) : [];
+      const initials  = b.initials || b.name.substring(0,2).toUpperCase();
+      return `
+        <tr>
+          <td>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="width:34px;height:34px;min-width:34px;border-radius:8px;
+                background:${b.gradient};display:flex;align-items:center;
+                justify-content:center;font-weight:800;color:white;font-size:14px;">${initials}</div>
+              <span style="font-weight:600;">${b.name}</span>
+            </div>
+          </td>
+          <td class="text-muted">${b.industry || '—'}</td>
+          <td><div style="display:flex;gap:4px;">${platforms.map(p => platformIcon(p)).join('')}</div></td>
+          <td>${b.manager_name || '—'}</td>
+          <td style="font-weight:600;">${b.post_target || 30}</td>
+          <td>${statusBadge(b.status)}</td>
+          <td>
+            <div style="display:flex;gap:6px;">
+              <button class="btn btn-outline btn-sm" onclick="editBrand(${b.id})">Edit</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteBrand(${b.id},'${b.name}')">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // ── FILTER TAB ──
+  function filterTab(btn, status) {
+    document.querySelectorAll('.filter-tab').forEach(b => {
+      b.classList.remove('btn-primary');
+      b.classList.add('btn-outline');
+    });
+    btn.classList.add('btn-primary');
+    btn.classList.remove('btn-outline');
+    activeFilter = status;
+    renderBrands();
+  }
+
+  // ── SEARCH ──
+  function filterBrands() {
+    activeSearch = document.getElementById('brandSearch').value.toLowerCase();
+    renderBrands();
+  }
+
+  // ── VIEW TOGGLE ──
+  function setView(view) {
+    currentView = view;
+    document.getElementById('gridViewBtn').style.background = view === 'grid' ? 'var(--gradient)' : 'transparent';
+    document.getElementById('gridViewBtn').style.color      = view === 'grid' ? 'white' : 'var(--muted)';
+    document.getElementById('listViewBtn').style.background = view === 'list' ? 'var(--gradient)' : 'transparent';
+    document.getElementById('listViewBtn').style.color      = view === 'list' ? 'white' : 'var(--muted)';
+    renderBrands();
+  }
+
+  // ── COLOR SELECT ──
+  function selectColor(el, gradient) {
+    document.querySelectorAll('.color-opt').forEach(c => c.style.border = '3px solid transparent');
+    el.style.border = '3px solid white';
+    selectedGradient = gradient;
+    document.getElementById('brandGradient').value = gradient;
+  }
+
+  // ── OPEN MODAL ──
+  function openModal(brand = null) {
+    document.getElementById('brandForm').reset();
+    document.getElementById('editBrandId').value = '';
+    document.getElementById('modalTitle').textContent  = 'Add New Brand';
+    document.getElementById('submitBtn').textContent   = 'Add Brand';
+    selectedGradient = 'linear-gradient(135deg,#7C3AED,#EC4899)';
+    document.querySelectorAll('.color-opt').forEach((c,i) => c.style.border = i===0 ? '3px solid white' : '3px solid transparent');
+
+    if (brand) {
+      document.getElementById('modalTitle').textContent  = 'Edit Brand';
+      document.getElementById('submitBtn').textContent   = 'Save Changes';
+      document.getElementById('editBrandId').value       = brand.id;
+      document.getElementById('brandName').value         = brand.name;
+      document.getElementById('brandIndustry').value     = brand.industry || '';
+      document.getElementById('brandDesc').value         = brand.description || '';
+      document.getElementById('brandTarget').value       = brand.post_target || 30;
+      document.getElementById('brandStatus').value       = brand.status || 'active';
+      selectedGradient = brand.gradient || selectedGradient;
+
+      // Check platforms
+      const platforms = Array.isArray(brand.platforms) ? brand.platforms : [];
+      document.querySelectorAll('.platform-check').forEach(cb => {
+        cb.checked = platforms.includes(cb.value);
+      });
+    }
+
+    document.getElementById('modalOverlay').style.display = 'block';
+    document.getElementById('brandModal').style.display   = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').style.display = 'none';
+    document.getElementById('brandModal').style.display   = 'none';
+    document.body.style.overflow = '';
+  }
+
+  // ── EDIT BRAND ──
+  async function editBrand(id) {
+    const brand = allBrands.find(b => b.id === id);
+    if (brand) openModal(brand);
+  }
+
+  // ── SUBMIT BRAND (ADD or EDIT) ──
+  async function submitBrand(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = 'Saving...';
+    btn.disabled = true;
+
+    const platforms = Array.from(document.querySelectorAll('.platform-check:checked')).map(cb => cb.value);
+    const editId    = document.getElementById('editBrandId').value;
+
+    const payload = {
+      name:        document.getElementById('brandName').value.trim(),
+      industry:    document.getElementById('brandIndustry').value,
+      description: document.getElementById('brandDesc').value.trim(),
+      post_target: parseInt(document.getElementById('brandTarget').value) || 30,
+      status:      document.getElementById('brandStatus').value,
+      gradient:    selectedGradient,
+      initials:    document.getElementById('brandName').value.trim().substring(0,2).toUpperCase(),
+      platforms
+    };
+
+    try {
+      const url    = editId ? `${API}/brands/${editId}` : `${API}/brands`;
+      const method = editId ? 'PUT' : 'POST';
+
+      const res  = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert('Error: ' + data.error);
+        btn.textContent = editId ? 'Save Changes' : 'Add Brand';
+        btn.disabled = false;
+        return;
+      }
+
+      btn.textContent = '✔ Saved!';
+      btn.style.background = 'var(--success)';
+      setTimeout(() => {
+        closeModal();
+        btn.style.background = '';
+        btn.disabled = false;
+        btn.textContent = editId ? 'Save Changes' : 'Add Brand';
+        loadBrands();
+      }, 700);
+
+    } catch (err) {
+      alert('Could not connect to server.');
+      btn.textContent = editId ? 'Save Changes' : 'Add Brand';
+      btn.disabled = false;
+    }
+  }
+
+  // ── DELETE BRAND ──
+  async function deleteBrand(id, name) {
+    if (!confirm(`Are you sure you want to delete "${name}"? This cannot be undone.`)) return;
+
+    try {
+      const res = await fetch(`${API}/brands/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        loadBrands();
+      } else {
+        alert('Failed to delete brand.');
+      }
+    } catch (err) {
+      alert('Could not connect to server.');
+    }
+  }
+
+  // ── INIT ──
+  loadBrands();
+</script>
+
+</body>
+</html>

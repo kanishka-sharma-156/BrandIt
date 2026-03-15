@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BRANDIT – Team</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">B</div>
+      <div>
+        <div class="logo-text">BRANDIT</div>
+        <div class="logo-sub">Brand Management</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <span class="nav-section-label">Main</span>
+      <a href="dashboard.html" class="nav-link">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </a>
+      <a href="brands.html" class="nav-link">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+        Brands & Clients
+      </a>
+      <a href="calendar.html" class="nav-link">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Calendar
+      </a>
+      <a href="tasks.html" class="nav-link">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Tasks
+      </a>
+      <a href="team.html" class="nav-link active">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        Team
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="avatar" id="sidebarAvatar">AJ</div>
+        <div class="user-info" style="flex:1;">
+          <div class="user-name" id="sidebarName">Alex Johnson</div>
+          <div class="user-role" id="sidebarRole">Admin</div>
+        </div>
+        <svg onclick="logout()" title="Logout" style="margin-left:auto;color:var(--muted);width:16px;height:16px;cursor:pointer;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── TOPBAR ── -->
+  <header class="topbar">
+    <div class="topbar-title">
+      Team
+      <span>Manage your team members, roles and workload</span>
+    </div>
+    <div class="search-bar">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" placeholder="Search team members..." id="memberSearch" oninput="filterMembers()" />
+    </div>
+    <div class="topbar-actions">
+      <div class="avatar sm" id="topbarAvatar" style="cursor:pointer;">AJ</div>
+    </div>
+  </header>
+
+  <!-- ── MAIN ── -->
+  <main class="main-content">
+
+    <!-- STAT CARDS -->
+    <div class="stats-grid">
+      <div class="stat-card purple">
+        <div class="stat-icon-bg purple">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div class="stat-label">Total Members</div>
+        <div class="stat-value" id="statTotal">0</div>
+        <div class="stat-change up">All team</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-icon-bg green">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+        <div class="stat-label">Online</div>
+        <div class="stat-value" id="statOnline">0</div>
+        <div class="stat-change up">Available now</div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-icon-bg amber">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        </div>
+        <div class="stat-label">Active Tasks</div>
+        <div class="stat-value" id="statTasks">0</div>
+        <div class="stat-change up">In progress</div>
+      </div>
+      <div class="stat-card pink">
+        <div class="stat-icon-bg pink">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+        </div>
+        <div class="stat-label">Departments</div>
+        <div class="stat-value" id="statDepts">0</div>
+        <div class="stat-change up">Unique roles</div>
+      </div>
+    </div>
+
+    <!-- FILTER + INVITE -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm filter-tab" onclick="filterTab(this,'all')">All Members</button>
+        <button class="btn btn-outline btn-sm filter-tab" onclick="filterTab(this,'online')">Online</button>
+        <button class="btn btn-outline btn-sm filter-tab" onclick="filterTab(this,'busy')">Busy</button>
+        <button class="btn btn-outline btn-sm filter-tab" onclick="filterTab(this,'offline')">Offline</button>
+      </div>
+      <button class="btn btn-primary" onclick="openInviteModal()">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Member
+      </button>
+    </div>
+
+    <!-- LOADING -->
+    <div id="loadingState" style="text-align:center;padding:60px;color:var(--muted);">
+      <div style="width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;"></div>
+      Loading team...
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div id="emptyState" style="display:none;text-align:center;padding:60px;">
+      <div style="font-size:48px;margin-bottom:16px;">👥</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:8px;">No members yet</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:24px;">Add your first team member to get started</div>
+      <button class="btn btn-primary" onclick="openInviteModal()">+ Add Member</button>
+    </div>
+
+    <!-- MEMBER CARDS -->
+    <div class="grid-auto" id="memberGrid"></div>
+
+    <!-- TEAM TABLE -->
+    <div class="card mt-24" id="teamTableWrap" style="display:none;">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Full Team Overview</div>
+          <div class="section-sub">All members with roles and tasks</div>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Member</th>
+              <th>Role</th>
+              <th>Department</th>
+              <th>Active Tasks</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="teamTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── ADD MEMBER MODAL ── -->
+<div id="inviteOverlay" onclick="closeInviteModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;"></div>
+<div id="inviteModal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--dark);border:1px solid var(--border);border-radius:16px;padding:32px;width:500px;max-width:95vw;z-index:201;max-height:90vh;overflow-y:auto;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+    <div>
+      <h2 id="inviteTitle" style="font-size:18px;font-weight:700;">Add Team Member</h2>
+      <p style="font-size:13px;color:var(--muted);margin-top:4px;">Fill in the member details</p>
+    </div>
+    <button onclick="closeInviteModal()" style="background:var(--card);border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;">✕</button>
+  </div>
+  <form onsubmit="submitMember(event)" id="memberForm">
+    <input type="hidden" id="editMemberId" value="" />
+    <div class="grid-2">
+      <div class="form-group">
+        <label class="form-label">Full Name *</label>
+        <input class="form-input" type="text" id="memberName" placeholder="John Smith" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email *</label>
+        <input class="form-input" type="email" id="memberEmail" placeholder="john@brandit.com" required />
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label class="form-label">Role</label>
+        <select class="form-input" id="memberRole">
+          <option value="editor">Editor</option>
+          <option value="manager">Manager</option>
+          <option value="admin">Admin</option>
+          <option value="viewer">Viewer</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Department</label>
+        <input class="form-input" type="text" id="memberDept" placeholder="e.g. Creative" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Phone</label>
+      <input class="form-input" type="text" id="memberPhone" placeholder="+1 555 000" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Bio</label>
+      <textarea class="form-input" id="memberBio" placeholder="Brief description..."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Profile Color</label>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;">
+        <div class="color-opt active-color" onclick="selectMemberColor(this,'linear-gradient(135deg,#7C3AED,#EC4899)')" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#EC4899);cursor:pointer;border:3px solid white;"></div>
+        <div class="color-opt" onclick="selectMemberColor(this,'linear-gradient(135deg,#F59E0B,#EF4444)')" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#F59E0B,#EF4444);cursor:pointer;border:3px solid transparent;"></div>
+        <div class="color-opt" onclick="selectMemberColor(this,'linear-gradient(135deg,#10B981,#3B82F6)')" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#10B981,#3B82F6);cursor:pointer;border:3px solid transparent;"></div>
+        <div class="color-opt" onclick="selectMemberColor(this,'linear-gradient(135deg,#3B82F6,#8B5CF6)')" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#3B82F6,#8B5CF6);cursor:pointer;border:3px solid transparent;"></div>
+        <div class="color-opt" onclick="selectMemberColor(this,'linear-gradient(135deg,#EC4899,#F59E0B)')" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#EC4899,#F59E0B);cursor:pointer;border:3px solid transparent;"></div>
+      </div>
+      <input type="hidden" id="memberGradient" value="linear-gradient(135deg,#7C3AED,#EC4899)" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Status</label>
+      <select class="form-input" id="memberStatus">
+        <option value="online">Online</option>
+        <option value="busy">Busy</option>
+        <option value="away">Away</option>
+        <option value="offline">Offline</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:8px;">
+      <button type="button" class="btn btn-outline" onclick="closeInviteModal()">Cancel</button>
+      <button type="submit" id="inviteBtn" class="btn btn-primary">Add Member</button>
+    </div>
+  </form>
+</div>
+
+<!-- ── MEMBER DETAIL MODAL ── -->
+<div id="detailOverlay" onclick="closeDetailModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;"></div>
+<div id="detailModal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--dark);border:1px solid var(--border);border-radius:16px;padding:32px;width:460px;max-width:95vw;z-index:201;max-height:90vh;overflow-y:auto;">
+  <div id="detailContent"></div>
+</div>
+
+<style>
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .color-opt:hover { transform: scale(1.15); transition: transform 0.15s; }
+</style>
+
+<script>
+  const API = 'http://localhost:5000/api';
+  let allMembers   = [];
+  let activeFilter = 'all';
+  let activeSearch = '';
+  let selectedGradient = 'linear-gradient(135deg,#7C3AED,#EC4899)';
+
+  // ── LOAD USER ──
+  const user = JSON.parse(localStorage.getItem('brandit_user') || '{}');
+  if (!user.name) window.location.href = 'login.html';
+  document.getElementById('sidebarName').textContent   = user.name;
+  document.getElementById('sidebarRole').textContent   = user.role || 'Member';
+  document.getElementById('sidebarAvatar').textContent = user.initials || 'U';
+  document.getElementById('topbarAvatar').textContent  = user.initials || 'U';
+
+  function logout() {
+    localStorage.clear();
+    window.location.href = 'login.html';
+  }
+
+  // ── STATUS CONFIG ──
+  const statusColor = s => ({
+    online: '#10B981', busy: '#F59E0B',
+    away: '#3B82F6', offline: '#64748B'
+  }[s] || '#64748B');
+
+  const statusBadge = s => {
+    const map = {
+      online:  'badge-green',
+      busy:    'badge-amber',
+      away:    'badge-blue',
+      offline: 'badge-purple'
+    };
+    return `<span class="badge ${map[s] || 'badge-purple'}">${s}</span>`;
+  };
+
+  // ── LOAD TEAM ──
+  async function loadTeam() {
+    try {
+      const res  = await fetch(`${API}/team`);
+      allMembers = await res.json();
+      updateStats();
+      renderCards();
+      renderTable();
+    } catch (err) {
+      document.getElementById('loadingState').innerHTML =
+        `<div style="color:var(--danger);text-align:center;">❌ Could not connect to server.</div>`;
+    }
+  }
+
+  // ── UPDATE STATS ──
+  function updateStats() {
+    document.getElementById('statTotal').textContent  = allMembers.length;
+    document.getElementById('statOnline').textContent = allMembers.filter(m => m.status === 'online').length;
+    document.getElementById('statTasks').textContent  = allMembers.reduce((sum, m) => sum + parseInt(m.active_tasks || 0), 0);
+    const depts = new Set(allMembers.map(m => m.department).filter(Boolean));
+    document.getElementById('statDepts').textContent  = depts.size;
+  }
+
+  // ── RENDER CARDS ──
+  function renderCards() {
+    document.getElementById('loadingState').style.display = 'none';
+
+    let filtered = allMembers.filter(m => {
+      const matchFilter = activeFilter === 'all' || m.status === activeFilter;
+      const matchSearch = m.name.toLowerCase().includes(activeSearch) ||
+                         (m.role || '').toLowerCase().includes(activeSearch) ||
+                         (m.department || '').toLowerCase().includes(activeSearch);
+      return matchFilter && matchSearch;
+    });
+
+    if (filtered.length === 0 && allMembers.length === 0) {
+      document.getElementById('emptyState').style.display  = 'block';
+      document.getElementById('memberGrid').innerHTML      = '';
+      document.getElementById('teamTableWrap').style.display = 'none';
+      return;
+    }
+
+    document.getElementById('emptyState').style.display     = 'none';
+    document.getElementById('teamTableWrap').style.display  = 'block';
+
+    if (filtered.length === 0) {
+      document.getElementById('memberGrid').innerHTML =
+        `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);">
+          <div style="font-size:28px;margin-bottom:8px;">🔍</div>
+          No members match your search
+        </div>`;
+      return;
+    }
+
+    const gradient = m => m.gradient || 'linear-gradient(135deg,#7C3AED,#EC4899)';
+    const initials = m => m.name.split(' ').map(n=>n[0]).join('').toUpperCase().substring(0,2);
+
+    document.getElementById('memberGrid').innerHTML = filtered.map(m => `
+      <div class="member-card" onclick="openDetail(${m.id})" style="cursor:pointer;">
+        <div style="position:relative;width:fit-content;margin:0 auto 12px;">
+          <div class="avatar lg" style="background:${gradient(m)};">${initials(m)}</div>
+          <span style="position:absolute;bottom:1px;right:1px;width:12px;height:12px;
+            border-radius:50%;background:${statusColor(m.status)};
+            border:2px solid var(--card);"></span>
+        </div>
+        <div class="member-name">${m.name}</div>
+        <div class="member-role">${m.role || 'Member'}</div>
+        ${m.department ? `<div style="font-size:11px;color:var(--muted);margin-bottom:10px;">📁 ${m.department}</div>` : ''}
+
+        <div style="margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:5px;">
+            <span style="color:var(--muted);">Workload</span>
+            <span style="font-weight:700;color:${m.workload>=80?'#EF4444':m.workload>=50?'#F59E0B':'#10B981'};">${m.workload || 0}%</span>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-fill" style="width:${m.workload||0}%;background:${gradient(m)};"></div>
+          </div>
+        </div>
+
+        <div class="member-stats">
+          <div style="text-align:center;">
+            <div class="member-stat-val">${m.active_tasks || 0}</div>
+            <div class="member-stat-lbl">Tasks</div>
+          </div>
+          <div style="text-align:center;">
+            ${statusBadge(m.status || 'offline')}
+            <div class="member-stat-lbl" style="margin-top:3px;">Status</div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ── RENDER TABLE ──
+  function renderTable() {
+    const initials = m => m.name.split(' ').map(n=>n[0]).join('').toUpperCase().substring(0,2);
+    const gradient = m => m.gradient || 'linear-gradient(135deg,#7C3AED,#EC4899)';
+
+    document.getElementById('teamTableBody').innerHTML = allMembers.map(m => `
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="position:relative;">
+              <div class="avatar sm" style="background:${gradient(m)};">${initials(m)}</div>
+              <span style="position:absolute;bottom:0;right:0;width:8px;height:8px;
+                border-radius:50%;background:${statusColor(m.status)};
+                border:1px solid var(--card);"></span>
+            </div>
+            <div>
+              <div style="font-weight:600;font-size:13px;">${m.name}</div>
+              <div style="font-size:11px;color:var(--muted);">${m.email || ''}</div>
+            </div>
+          </div>
+        </td>
+        <td><span class="badge badge-purple">${m.role || 'Member'}</span></td>
+        <td style="color:var(--muted);font-size:13px;">${m.department || '—'}</td>
+        <td style="font-weight:700;">${m.active_tasks || 0}</td>
+        <td>${statusBadge(m.status || 'offline')}</td>
+        <td>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-outline btn-sm" onclick="openDetail(${m.id})">View</button>
+            <button class="btn btn-outline btn-sm" onclick="editMember(${m.id})">Edit</button>
+            <button class="btn btn-outline btn-sm" style="color:var(--danger);border-color:rgba(239,68,68,0.3);"
+              onclick="deleteMember(${m.id},'${m.name}')">Remove</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // ── FILTER ──
+  function filterTab(btn, status) {
+    document.querySelectorAll('.filter-tab').forEach(b => {
+      b.classList.remove('btn-primary');
+      b.classList.add('btn-outline');
+    });
+    btn.classList.add('btn-primary');
+    btn.classList.remove('btn-outline');
+    activeFilter = status;
+    renderCards();
+  }
+
+  function filterMembers() {
+    activeSearch = document.getElementById('memberSearch').value.toLowerCase();
+    renderCards();
+  }
+
+  // ── OPEN DETAIL ──
+  function openDetail(id) {
+    const m = allMembers.find(m => m.id === id);
+    if (!m) return;
+
+    const gradient = m.gradient || 'linear-gradient(135deg,#7C3AED,#EC4899)';
+    const initials = m.name.split(' ').map(n=>n[0]).join('').toUpperCase().substring(0,2);
+
+    document.getElementById('detailContent').innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;">
+        <div style="display:flex;align-items:center;gap:16px;">
+          <div style="position:relative;">
+            <div class="avatar lg" style="background:${gradient};">${initials}</div>
+            <span style="position:absolute;bottom:2px;right:2px;width:13px;height:13px;
+              border-radius:50%;background:${statusColor(m.status)};border:2px solid var(--dark);"></span>
+          </div>
+          <div>
+            <h2 style="font-size:18px;font-weight:700;">${m.name}</h2>
+            <p style="color:var(--muted);font-size:13px;margin-top:3px;">${m.role || 'Member'}</p>
+            <div style="margin-top:6px;">${statusBadge(m.status || 'offline')}</div>
+          </div>
+        </div>
+        <button onclick="closeDetailModal()" style="background:var(--card);border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;">✕</button>
+      </div>
+
+      ${m.bio ? `<p style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:20px;">${m.bio}</p>` : ''}
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+        <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:12px;">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Email</div>
+          <div style="font-size:13px;font-weight:600;">${m.email || '—'}</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:12px;">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Phone</div>
+          <div style="font-size:13px;font-weight:600;">${m.phone || '—'}</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:12px;">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Department</div>
+          <div style="font-size:13px;font-weight:600;">${m.department || '—'}</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:12px;">
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Active Tasks</div>
+          <div style="font-size:13px;font-weight:600;">${m.active_tasks || 0} tasks</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:20px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Workload</span>
+          <span style="font-size:13px;font-weight:700;">${m.workload || 0}%</span>
+        </div>
+        <div class="progress-wrap" style="height:8px;">
+          <div class="progress-fill" style="width:${m.workload||0}%;background:${gradient};"></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-primary" style="flex:1;justify-content:center;" onclick="closeDetailModal();editMember(${m.id})">
+          Edit Profile
+        </button>
+        <button class="btn btn-outline" style="flex:1;justify-content:center;" onclick="closeDetailModal()">
+          Close
+        </button>
+      </div>
+    `;
+
+    document.getElementById('detailOverlay').style.display = 'block';
+    document.getElementById('detailModal').style.display   = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDetailModal() {
+    document.getElementById('detailOverlay').style.display = 'none';
+    document.getElementById('detailModal').style.display   = 'none';
+    document.body.style.overflow = '';
+  }
+
+  // ── EDIT MEMBER ──
+  function editMember(id) {
+    const m = allMembers.find(m => m.id === id);
+    if (!m) return;
+
+    document.getElementById('inviteTitle').textContent   = 'Edit Member';
+    document.getElementById('inviteBtn').textContent     = 'Save Changes';
+    document.getElementById('editMemberId').value        = m.id;
+    document.getElementById('memberName').value          = m.name;
+    document.getElementById('memberEmail').value         = m.email || '';
+    document.getElementById('memberRole').value          = m.role || 'editor';
+    document.getElementById('memberDept').value          = m.department || '';
+    document.getElementById('memberPhone').value         = m.phone || '';
+    document.getElementById('memberBio').value           = m.bio || '';
+    document.getElementById('memberStatus').value        = m.status || 'online';
+    selectedGradient = m.gradient || selectedGradient;
+
+    openInviteModal();
+  }
+
+  // ── DELETE MEMBER ──
+  async function deleteMember(id, name) {
+    if (!confirm(`Remove "${name}" from the team?`)) return;
+    try {
+      const res = await fetch(`${API}/team/${id}`, { method: 'DELETE' });
+      if (res.ok) loadTeam();
+      else alert('Failed to remove member.');
+    } catch (err) {
+      alert('Could not connect to server.');
+    }
+  }
+
+  // ── COLOR SELECT ──
+  function selectMemberColor(el, gradient) {
+    document.querySelectorAll('.color-opt').forEach(c => c.style.border = '3px solid transparent');
+    el.style.border = '3px solid white';
+    selectedGradient = gradient;
+    document.getElementById('memberGradient').value = gradient;
+  }
+
+  // ── INVITE MODAL ──
+  function openInviteModal() {
+    document.getElementById('inviteOverlay').style.display = 'block';
+    document.getElementById('inviteModal').style.display   = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeInviteModal() {
+    document.getElementById('memberForm').reset();
+    document.getElementById('editMemberId').value        = '';
+    document.getElementById('inviteTitle').textContent   = 'Add Team Member';
+    document.getElementById('inviteBtn').textContent     = 'Add Member';
+    document.getElementById('inviteOverlay').style.display = 'none';
+    document.getElementById('inviteModal').style.display   = 'none';
+    document.body.style.overflow = '';
+  }
+
+  // ── SUBMIT MEMBER ──
+  async function submitMember(e) {
+    e.preventDefault();
+    const btn    = document.getElementById('inviteBtn');
+    const editId = document.getElementById('editMemberId').value;
+
+    btn.textContent = 'Saving...';
+    btn.disabled    = true;
+
+    const payload = {
+      name:       document.getElementById('memberName').value.trim(),
+      email:      document.getElementById('memberEmail').value.trim(),
+      role:       document.getElementById('memberRole').value,
+      department: document.getElementById('memberDept').value.trim(),
+      phone:      document.getElementById('memberPhone').value.trim(),
+      bio:        document.getElementById('memberBio').value.trim(),
+      gradient:   selectedGradient,
+      status:     document.getElementById('memberStatus').value,
+    };
+
+    try {
+      const url    = editId ? `${API}/team/${editId}` : `${API}/team`;
+      const method = editId ? 'PUT' : 'POST';
+
+      const res  = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert('Error: ' + data.error);
+        btn.textContent = editId ? 'Save Changes' : 'Add Member';
+        btn.disabled    = false;
+        return;
+      }
+
+      btn.textContent      = '✔ Saved!';
+      btn.style.background = 'var(--success)';
+      setTimeout(() => {
+        closeInviteModal();
+        btn.style.background = '';
+        btn.disabled         = false;
+        loadTeam();
+      }, 700);
+
+    } catch (err) {
+      alert('Could not connect to server.');
+      btn.textContent = editId ? 'Save Changes' : 'Add Member';
+      btn.disabled    = false;
+    }
+  }
+
+  // ── INIT ──
+  loadTeam();
+</script>
+
+</body>
+</html>

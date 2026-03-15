@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BRANDIT – Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">B</div>
+      <div>
+        <div class="logo-text">BRANDIT</div>
+        <div class="logo-sub">Brand Management</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <span class="nav-section-label">Main</span>
+      <a href="dashboard.html" class="nav-link active">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </a>
+      <a href="brands.html" class="nav-link">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+        Brands & Clients
+      </a>
+      <a href="calendar.html" class="nav-link">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Calendar
+      </a>
+      <a href="tasks.html" class="nav-link">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Tasks
+      </a>
+      <a href="team.html" class="nav-link">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        Team
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="avatar" id="sidebarAvatar">AJ</div>
+        <div class="user-info" style="flex:1;">
+          <div class="user-name" id="sidebarName">Alex Johnson</div>
+          <div class="user-role" id="sidebarRole">Admin</div>
+        </div>
+        <svg onclick="logout()" title="Logout" style="margin-left:auto;color:var(--muted);width:16px;height:16px;cursor:pointer;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── TOPBAR ── -->
+  <header class="topbar">
+    <div class="topbar-title">
+      Dashboard
+      <span id="welcomeMsg">Welcome back 👋</span>
+    </div>
+    <div class="search-bar">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" placeholder="Search brands, tasks, team..." />
+    </div>
+    <div class="topbar-actions">
+      <div class="icon-btn" title="Refresh" onclick="loadAll()">
+        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+      </div>
+      <div class="avatar sm" id="topbarAvatar" style="cursor:pointer;">AJ</div>
+    </div>
+  </header>
+
+  <!-- ── MAIN ── -->
+  <main class="main-content">
+
+    <!-- STAT CARDS -->
+    <div class="stats-grid">
+      <div class="stat-card purple">
+        <div class="stat-icon-bg purple">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+        </div>
+        <div class="stat-label">Active Brands</div>
+        <div class="stat-value" id="statBrands">—</div>
+        <div class="stat-change up" id="statBrandsSub">Loading...</div>
+      </div>
+      <div class="stat-card pink">
+        <div class="stat-icon-bg pink">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        </div>
+        <div class="stat-label">Posts Scheduled</div>
+        <div class="stat-value" id="statPosts">—</div>
+        <div class="stat-change up" id="statPostsSub">Loading...</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-icon-bg green">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        </div>
+        <div class="stat-label">Tasks Completed</div>
+        <div class="stat-value" id="statTasks">—</div>
+        <div class="stat-change up" id="statTasksSub">Loading...</div>
+      </div>
+      <div class="stat-card amber">
+        <div class="stat-icon-bg amber">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div class="stat-label">Team Members</div>
+        <div class="stat-value" id="statTeam">—</div>
+        <div class="stat-change up" id="statTeamSub">Loading...</div>
+      </div>
+    </div>
+
+    <!-- ROW 2: BRANDS + TASKS -->
+    <div class="grid-2 mb-24">
+
+      <!-- RECENT BRANDS -->
+      <div class="card">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Recent Brands</div>
+            <div class="section-sub">Latest client accounts</div>
+          </div>
+          <a href="brands.html"><button class="btn btn-outline btn-sm">View All</button></a>
+        </div>
+        <div id="recentBrands">
+          <div style="text-align:center;padding:32px;color:var(--muted);">
+            <div style="width:24px;height:24px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;"></div>
+            Loading...
+          </div>
+        </div>
+      </div>
+
+      <!-- UPCOMING TASKS -->
+      <div class="card">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Upcoming Tasks</div>
+            <div class="section-sub">Due soon</div>
+          </div>
+          <a href="tasks.html"><button class="btn btn-outline btn-sm">View All</button></a>
+        </div>
+        <div id="upcomingTasks">
+          <div style="text-align:center;padding:32px;color:var(--muted);">
+            <div style="width:24px;height:24px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;"></div>
+            Loading...
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ROW 3: TEAM WORKLOAD + QUICK ACTIONS -->
+    <div class="grid-2">
+
+      <!-- TEAM WORKLOAD -->
+      <div class="card">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Team Workload</div>
+            <div class="section-sub">Active task distribution</div>
+          </div>
+          <a href="team.html"><button class="btn btn-outline btn-sm">View Team</button></a>
+        </div>
+        <div id="teamWorkload">
+          <div style="text-align:center;padding:32px;color:var(--muted);">
+            <div style="width:24px;height:24px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;"></div>
+            Loading...
+          </div>
+        </div>
+      </div>
+
+      <!-- QUICK ACTIONS + SUMMARY -->
+      <div style="display:flex;flex-direction:column;gap:20px;">
+
+        <!-- QUICK ACTIONS -->
+        <div class="card">
+          <div class="section-title" style="margin-bottom:16px;">Quick Actions</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <a href="brands.html">
+              <button class="btn btn-primary w-full" style="justify-content:flex-start;">
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add New Brand
+              </button>
+            </a>
+            <a href="tasks.html">
+              <button class="btn btn-outline w-full" style="justify-content:flex-start;">
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Create Task
+              </button>
+            </a>
+            <a href="team.html">
+              <button class="btn btn-outline w-full" style="justify-content:flex-start;">
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add Team Member
+              </button>
+            </a>
+            <a href="calendar.html">
+              <button class="btn btn-outline w-full" style="justify-content:flex-start;">
+                <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                Schedule Post
+              </button>
+            </a>
+          </div>
+        </div>
+
+        <!-- TASK SUMMARY -->
+        <div class="card">
+          <div class="section-title" style="margin-bottom:16px;">Task Summary</div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:10px;height:10px;border-radius:50%;background:#10B981;"></div>
+                <span style="font-size:13px;">Completed</span>
+              </div>
+              <span id="sumDone" style="font-weight:700;">0</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:10px;height:10px;border-radius:50%;background:#3B82F6;"></div>
+                <span style="font-size:13px;">In Progress</span>
+              </div>
+              <span id="sumProgress" style="font-weight:700;">0</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:10px;height:10px;border-radius:50%;background:#7C3AED;"></div>
+                <span style="font-size:13px;">To Do</span>
+              </div>
+              <span id="sumTodo" style="font-weight:700;">0</span>
+            </div>
+            <div style="margin-top:8px;">
+              <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;">
+                <span style="color:var(--muted);">Overall completion</span>
+                <span id="sumPct" style="font-weight:700;">0%</span>
+              </div>
+              <div class="progress-wrap">
+                <div class="progress-fill green" id="sumBar" style="width:0%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<style>
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<script>
+  const API = 'http://localhost:5000/api';
+
+  // ── LOAD USER ──
+  const user = JSON.parse(localStorage.getItem('brandit_user') || '{}');
+  if (!user.name) window.location.href = 'login.html';
+  document.getElementById('sidebarName').textContent   = user.name;
+  document.getElementById('sidebarRole').textContent   = user.role || 'Member';
+  document.getElementById('sidebarAvatar').textContent = user.initials || 'U';
+  document.getElementById('topbarAvatar').textContent  = user.initials || 'U';
+  document.getElementById('welcomeMsg').textContent    = `Welcome back, ${user.name} 👋`;
+
+  function logout() {
+    localStorage.clear();
+    window.location.href = 'login.html';
+  }
+
+  // ── PLATFORM ICON ──
+  function platformIcon(p) {
+    const map = {
+      IG: 'background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045)',
+      TW: 'background:#1DA1F2', LI: 'background:#0A66C2',
+      FB: 'background:#1877F2', TK: 'background:#010101;border:1px solid #333'
+    };
+    return `<span style="width:22px;height:22px;min-width:22px;border-radius:5px;
+      display:inline-flex;align-items:center;justify-content:center;
+      font-size:8px;font-weight:700;color:white;${map[p]||'background:#333'};">${p}</span>`;
+  }
+
+  // ── STATUS BADGE ──
+  function taskBadge(s) {
+    const map = {
+      done:       ['badge-green',  'Done'],
+      inprogress: ['badge-blue',   'In Progress'],
+      todo:       ['badge-purple', 'To Do'],
+    };
+    return `<span class="badge ${(map[s]||['badge-blue',''])[0]}">${(map[s]||['','?'])[1]}</span>`;
+  }
+
+  // ── LOAD ALL DATA ──
+  async function loadAll() {
+    try {
+      const [brandsRes, tasksRes, teamRes, postsRes] = await Promise.all([
+        fetch(`${API}/brands`),
+        fetch(`${API}/tasks`),
+        fetch(`${API}/team`),
+        fetch(`${API}/calendar`)
+      ]);
+
+      const brands = await brandsRes.json();
+      const tasks  = await tasksRes.json();
+      const team   = await teamRes.json();
+      const posts  = await postsRes.json();
+
+      renderStats(brands, tasks, team, posts);
+      renderRecentBrands(brands);
+      renderUpcomingTasks(tasks);
+      renderTeamWorkload(team, tasks);
+      renderTaskSummary(tasks);
+
+    } catch (err) {
+      console.error('Dashboard load error:', err);
+    }
+  }
+
+  // ── RENDER STATS ──
+  function renderStats(brands, tasks, team, posts) {
+    const activeBrands = brands.filter(b => b.status === 'active').length;
+    const doneTasks    = tasks.filter(t => t.status === 'done').length;
+
+    document.getElementById('statBrands').textContent    = activeBrands;
+    document.getElementById('statBrandsSub').textContent = `${brands.length} total brands`;
+    document.getElementById('statPosts').textContent     = posts.length;
+    document.getElementById('statPostsSub').textContent  = `Across all brands`;
+    document.getElementById('statTasks').textContent     = doneTasks;
+    document.getElementById('statTasksSub').textContent  = `${tasks.length} total tasks`;
+    document.getElementById('statTeam').textContent      = team.length;
+    document.getElementById('statTeamSub').textContent   = `${team.filter(m=>m.status==='online').length} online now`;
+  }
+
+  // ── RENDER RECENT BRANDS ──
+  function renderRecentBrands(brands) {
+    if (brands.length === 0) {
+      document.getElementById('recentBrands').innerHTML =
+        `<div style="text-align:center;padding:24px;color:var(--muted);">
+          <div style="font-size:24px;margin-bottom:8px;">📦</div>
+          No brands yet — <a href="brands.html" style="color:var(--primary-light);">add one</a>
+        </div>`;
+      return;
+    }
+
+    const recent = brands.slice(0, 5);
+    document.getElementById('recentBrands').innerHTML = `
+      <table style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr>
+            <th style="text-align:left;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;padding:8px 12px;border-bottom:1px solid var(--border);">Brand</th>
+            <th style="text-align:left;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;padding:8px 12px;border-bottom:1px solid var(--border);">Platforms</th>
+            <th style="text-align:left;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;padding:8px 12px;border-bottom:1px solid var(--border);">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${recent.map(b => {
+            const platforms = Array.isArray(b.platforms) ? b.platforms.filter(p=>p) : [];
+            const initials  = b.initials || b.name.substring(0,2).toUpperCase();
+            const statusMap = { active:'badge-green', review:'badge-amber', paused:'badge-red' };
+            const labelMap  = { active:'Active', review:'Review', paused:'Paused' };
+            return `
+              <tr onmouseover="this.style.background='rgba(124,58,237,0.05)'" onmouseout="this.style.background=''">
+                <td style="padding:12px;">
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <div style="width:30px;height:30px;min-width:30px;border-radius:7px;
+                      background:${b.gradient};display:flex;align-items:center;
+                      justify-content:center;font-weight:800;color:white;font-size:13px;">${initials}</div>
+                    <span style="font-weight:600;font-size:13px;">${b.name}</span>
+                  </div>
+                </td>
+                <td style="padding:12px;">
+                  <div style="display:flex;gap:3px;">${platforms.map(p=>platformIcon(p)).join('')}</div>
+                </td>
+                <td style="padding:12px;">
+                  <span class="badge ${statusMap[b.status]||'badge-blue'}">${labelMap[b.status]||b.status}</span>
+                </td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  // ── RENDER UPCOMING TASKS ──
+  function renderUpcomingTasks(tasks) {
+    const pending = tasks
+      .filter(t => t.status !== 'done')
+      .slice(0, 6);
+
+    if (pending.length === 0) {
+      document.getElementById('upcomingTasks').innerHTML =
+        `<div style="text-align:center;padding:24px;color:var(--muted);">
+          <div style="font-size:24px;margin-bottom:8px;">✅</div>
+          All caught up! No pending tasks.
+        </div>`;
+      return;
+    }
+
+    const priorityColor = p => p==='high'?'#EF4444':p==='medium'?'#F59E0B':'#10B981';
+
+    document.getElementById('upcomingTasks').innerHTML = pending.map(t => `
+      <div style="display:flex;align-items:center;gap:12px;padding:11px 0;
+        border-bottom:1px solid rgba(51,65,85,0.4);">
+        <div style="width:8px;height:8px;min-width:8px;border-radius:50%;
+          background:${priorityColor(t.priority)};"></div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${t.title}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">
+            ${t.brand_name ? `📦 ${t.brand_name}` : ''}
+            ${t.due_date ? ` · 📅 ${t.due_date.substring(0,10)}` : ''}
+          </div>
+        </div>
+        ${taskBadge(t.status)}
+      </div>
+    `).join('');
+  }
+
+  // ── RENDER TEAM WORKLOAD ──
+  function renderTeamWorkload(team, tasks) {
+    if (team.length === 0) {
+      document.getElementById('teamWorkload').innerHTML =
+        `<div style="text-align:center;padding:24px;color:var(--muted);">
+          <div style="font-size:24px;margin-bottom:8px;">👥</div>
+          No team members yet — <a href="team.html" style="color:var(--primary-light);">add one</a>
+        </div>`;
+      return;
+    }
+
+    document.getElementById('teamWorkload').innerHTML = team.slice(0,5).map(m => {
+      const memberTasks  = tasks.filter(t => t.assignee_id === m.id);
+      const activeTasks  = memberTasks.filter(t => t.status !== 'done').length;
+      const totalTasks   = memberTasks.length;
+      const pct          = totalTasks > 0 ? Math.round((activeTasks/totalTasks)*100) : 0;
+      const gradient     = m.gradient || 'linear-gradient(135deg,#7C3AED,#EC4899)';
+      const initials     = m.name.split(' ').map(n=>n[0]).join('').toUpperCase().substring(0,2);
+      const color        = pct >= 80 ? '#EF4444' : pct >= 50 ? '#F59E0B' : '#10B981';
+
+      return `
+        <div style="margin-bottom:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="avatar sm" style="background:${gradient};">${initials}</div>
+              <div>
+                <div style="font-size:13px;font-weight:600;">${m.name}</div>
+                <div style="font-size:11px;color:var(--muted);">${m.role || 'Member'}</div>
+              </div>
+            </div>
+            <span style="font-size:13px;font-weight:700;color:${color};">${activeTasks} tasks</span>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-fill" style="width:${pct}%;background:${gradient};"></div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ── RENDER TASK SUMMARY ──
+  function renderTaskSummary(tasks) {
+    const done     = tasks.filter(t => t.status === 'done').length;
+    const progress = tasks.filter(t => t.status === 'inprogress').length;
+    const todo     = tasks.filter(t => t.status === 'todo').length;
+    const total    = tasks.length;
+    const pct      = total > 0 ? Math.round((done/total)*100) : 0;
+
+    document.getElementById('sumDone').textContent     = done;
+    document.getElementById('sumProgress').textContent = progress;
+    document.getElementById('sumTodo').textContent     = todo;
+    document.getElementById('sumPct').textContent      = pct + '%';
+    document.getElementById('sumBar').style.width      = pct + '%';
+  }
+
+  // ── INIT ──
+  loadAll();
+</script>
+
+</body>
+</html>

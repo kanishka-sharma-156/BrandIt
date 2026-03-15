@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BRANDIT – Calendar</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">B</div>
+      <div>
+        <div class="logo-text">BRANDIT</div>
+        <div class="logo-sub">Brand Management</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <span class="nav-section-label">Main</span>
+      <a href="dashboard.html" class="nav-link">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </a>
+      <a href="brands.html" class="nav-link">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+        Brands & Clients
+      </a>
+      <a href="calendar.html" class="nav-link active">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Calendar
+      </a>
+      <a href="tasks.html" class="nav-link">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Tasks
+      </a>
+      <a href="team.html" class="nav-link">
+        <svg class="nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        Team
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="avatar" id="sidebarAvatar">AJ</div>
+        <div class="user-info" style="flex:1;">
+          <div class="user-name" id="sidebarName">Alex Johnson</div>
+          <div class="user-role" id="sidebarRole">Admin</div>
+        </div>
+        <svg onclick="logout()" title="Logout" style="margin-left:auto;color:var(--muted);width:16px;height:16px;cursor:pointer;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── TOPBAR ── -->
+  <header class="topbar">
+    <div class="topbar-title">
+      Content Calendar
+      <span>Schedule and manage posts across all brands</span>
+    </div>
+    <div class="search-bar">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" placeholder="Search posts..." id="postSearch" oninput="filterPosts()" />
+    </div>
+    <div class="topbar-actions">
+      <div class="avatar sm" id="topbarAvatar" style="cursor:pointer;">AJ</div>
+    </div>
+  </header>
+
+  <!-- ── MAIN ── -->
+  <main class="main-content">
+
+    <!-- CONTROLS -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+
+      <!-- Month nav -->
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button onclick="changeMonth(-1)" class="icon-btn" style="width:34px;height:34px;">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <h2 id="monthLabel" style="font-size:20px;font-weight:800;min-width:200px;text-align:center;"></h2>
+        <button onclick="changeMonth(1)" class="icon-btn" style="width:34px;height:34px;">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <button onclick="goToday()" class="btn btn-outline btn-sm">Today</button>
+      </div>
+
+      <!-- Right controls -->
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <select class="form-input" style="width:auto;padding:8px 12px;font-size:13px;" onchange="filterByBrand(this.value)" id="brandFilter">
+          <option value="all">All Brands</option>
+        </select>
+        <div style="display:flex;background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+          <button id="btnMonth" onclick="setView('month')" style="padding:7px 14px;background:var(--gradient);border:none;color:white;cursor:pointer;font-size:13px;font-family:inherit;">Month</button>
+          <button id="btnList"  onclick="setView('list')"  style="padding:7px 14px;background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:13px;font-family:inherit;">List</button>
+        </div>
+        <button class="btn btn-primary" onclick="openPostModal()">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Schedule Post
+        </button>
+      </div>
+    </div>
+
+    <!-- MONTH VIEW -->
+    <div id="monthView" class="card" style="padding:20px;">
+      <div class="cal-grid" style="margin-bottom:4px;">
+        <div class="cal-day-header">Sun</div>
+        <div class="cal-day-header">Mon</div>
+        <div class="cal-day-header">Tue</div>
+        <div class="cal-day-header">Wed</div>
+        <div class="cal-day-header">Thu</div>
+        <div class="cal-day-header">Fri</div>
+        <div class="cal-day-header">Sat</div>
+      </div>
+      <div class="cal-grid" id="calDays">
+        <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);">
+          <div style="width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;"></div>
+          Loading calendar...
+        </div>
+      </div>
+    </div>
+
+    <!-- LIST VIEW -->
+    <div id="listView" style="display:none;">
+      <div class="card">
+        <div class="section-header">
+          <div>
+            <div class="section-title">All Scheduled Posts</div>
+            <div class="section-sub" id="listCount">0 posts</div>
+          </div>
+        </div>
+        <div id="emptyList" style="display:none;text-align:center;padding:40px;">
+          <div style="font-size:36px;margin-bottom:12px;">📅</div>
+          <div style="font-size:15px;font-weight:600;margin-bottom:8px;">No posts scheduled</div>
+          <div style="font-size:13px;color:var(--muted);margin-bottom:20px;">Schedule your first post to get started</div>
+          <button class="btn btn-primary" onclick="openPostModal()">+ Schedule Post</button>
+        </div>
+        <div class="table-wrap">
+          <table id="listTable" style="display:none;">
+            <thead>
+              <tr>
+                <th>Date & Time</th>
+                <th>Brand</th>
+                <th>Platform</th>
+                <th>Caption</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="listBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── SCHEDULE POST MODAL ── -->
+<div id="postOverlay" onclick="closePostModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;"></div>
+<div id="postModal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--dark);border:1px solid var(--border);border-radius:16px;padding:32px;width:540px;max-width:95vw;z-index:201;max-height:90vh;overflow-y:auto;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+    <div>
+      <h2 id="postModalTitle" style="font-size:18px;font-weight:700;">Schedule New Post</h2>
+      <p style="font-size:13px;color:var(--muted);margin-top:4px;">Plan content across your brands</p>
+    </div>
+    <button onclick="closePostModal()" style="background:var(--card);border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;">✕</button>
+  </div>
+  <form onsubmit="submitPost(event)" id="postForm">
+    <input type="hidden" id="editPostId" value="" />
+    <div class="grid-2">
+      <div class="form-group">
+        <label class="form-label">Brand *</label>
+        <select class="form-input" id="postBrand" required>
+          <option value="">Select brand</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Platform *</label>
+        <select class="form-input" id="postPlatform" required>
+          <option value="">Select platform</option>
+          <option value="IG">Instagram</option>
+          <option value="TK">TikTok</option>
+          <option value="LI">LinkedIn</option>
+          <option value="FB">Facebook</option>
+          <option value="TW">Twitter / X</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label class="form-label">Date *</label>
+        <input class="form-input" type="date" id="postDate" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Time *</label>
+        <input class="form-input" type="time" id="postTime" required />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Caption</label>
+      <textarea class="form-input" id="postCaption" rows="3" placeholder="Write your post caption..."></textarea>
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label class="form-label">Post Type</label>
+        <select class="form-input" id="postType">
+          <option value="image">Image</option>
+          <option value="video">Video</option>
+          <option value="carousel">Carousel</option>
+          <option value="story">Story</option>
+          <option value="reel">Reel</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="form-input" id="postStatus">
+          <option value="draft">Draft</option>
+          <option value="scheduled">Scheduled</option>
+          <option value="needs_approval">Needs Approval</option>
+          <option value="published">Published</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Assigned To</label>
+      <select class="form-input" id="postAssignee">
+        <option value="">Unassigned</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:8px;">
+      <button type="button" class="btn btn-outline" onclick="closePostModal()">Cancel</button>
+      <button type="submit" id="postSubmitBtn" class="btn btn-primary">Schedule Post</button>
+    </div>
+  </form>
+</div>
+
+<!-- ── DAY DETAIL MODAL ── -->
+<div id="dayOverlay" onclick="closeDayModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;"></div>
+<div id="dayModal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--dark);border:1px solid var(--border);border-radius:16px;padding:28px;width:420px;max-width:95vw;z-index:201;max-height:80vh;overflow-y:auto;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+    <h3 id="dayModalTitle" style="font-size:16px;font-weight:700;"></h3>
+    <button onclick="closeDayModal()" style="background:var(--card);border:1px solid var(--border);color:var(--muted);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:14px;">✕</button>
+  </div>
+  <div id="dayModalContent"></div>
+  <button class="btn btn-primary w-full mt-16" onclick="closeDayModal();openPostModal();" style="justify-content:center;">
+    + Schedule Post on This Day
+  </button>
+</div>
+
+<style>
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<script>
+  const API = 'http://localhost:5000/api';
+  const MONTHS = ['January','February','March','April','May','June',
+                  'July','August','September','October','November','December'];
+
+  let allPosts   = [];
+  let allBrands  = [];
+  let allTeam    = [];
+  let currentYear  = new Date().getFullYear();
+  let currentMonth = new Date().getMonth();
+  let currentView  = 'month';
+  let activeBrand  = 'all';
+  let activeSearch = '';
+
+  // ── LOAD USER ──
+  const user = JSON.parse(localStorage.getItem('brandit_user') || '{}');
+  if (!user.name) window.location.href = 'login.html';
+  document.getElementById('sidebarName').textContent   = user.name;
+  document.getElementById('sidebarRole').textContent   = user.role || 'Member';
+  document.getElementById('sidebarAvatar').textContent = user.initials || 'U';
+  document.getElementById('topbarAvatar').textContent  = user.initials || 'U';
+
+  function logout() {
+    localStorage.clear();
+    window.location.href = 'login.html';
+  }
+
+  // ── STATUS BADGE ──
+  function statusBadge(s) {
+    const map = {
+      published:      'badge-green',
+      scheduled:      'badge-blue',
+      draft:          'badge-purple',
+      needs_approval: 'badge-amber'
+    };
+    const label = s ? s.replace('_',' ').replace(/\b\w/g,c=>c.toUpperCase()) : '—';
+    return `<span class="badge ${map[s]||'badge-blue'}">${label}</span>`;
+  }
+
+  // ── PLATFORM ICON ──
+  function platformIcon(p) {
+    const map = {
+      IG: 'background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045)',
+      TW: 'background:#1DA1F2', LI: 'background:#0A66C2',
+      FB: 'background:#1877F2', TK: 'background:#010101;border:1px solid #333'
+    };
+    return `<span style="width:26px;height:26px;min-width:26px;border-radius:6px;
+      display:inline-flex;align-items:center;justify-content:center;
+      font-size:9px;font-weight:700;color:white;${map[p]||'background:#333'};">${p||'?'}</span>`;
+  }
+
+  // ── LOAD ALL DATA ──
+  async function loadAll() {
+    try {
+      const [postsRes, brandsRes, teamRes] = await Promise.all([
+        fetch(`${API}/calendar`),
+        fetch(`${API}/brands`),
+        fetch(`${API}/team`)
+      ]);
+      allPosts  = await postsRes.json();
+      allBrands = await brandsRes.json();
+      allTeam   = await teamRes.json();
+
+      populateDropdowns();
+      render();
+    } catch (err) {
+      document.getElementById('calDays').innerHTML =
+        `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--danger);">
+          ❌ Could not connect to server.
+        </div>`;
+    }
+  }
+
+  // ── POPULATE DROPDOWNS ──
+  function populateDropdowns() {
+    const brandFilter = document.getElementById('brandFilter');
+    brandFilter.innerHTML = '<option value="all">All Brands</option>';
+    allBrands.forEach(b => {
+      brandFilter.innerHTML += `<option value="${b.id}">${b.name}</option>`;
+    });
+
+    const postBrand = document.getElementById('postBrand');
+    postBrand.innerHTML = '<option value="">Select brand</option>';
+    allBrands.forEach(b => {
+      postBrand.innerHTML += `<option value="${b.id}">${b.name}</option>`;
+    });
+
+    const postAssignee = document.getElementById('postAssignee');
+    postAssignee.innerHTML = '<option value="">Unassigned</option>';
+    allTeam.forEach(m => {
+      postAssignee.innerHTML += `<option value="${m.id}">${m.name}</option>`;
+    });
+  }
+
+  // ── RENDER ──
+  function render() {
+    document.getElementById('monthLabel').textContent = MONTHS[currentMonth] + ' ' + currentYear;
+    if (currentView === 'month') renderMonth();
+    else renderList();
+  }
+
+  // ── RENDER MONTH ──
+  function renderMonth() {
+    const firstDay    = new Date(currentYear, currentMonth, 1).getDay();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const daysInPrev  = new Date(currentYear, currentMonth, 0).getDate();
+    const today       = new Date();
+
+    let html = '';
+    let dayCount  = 1;
+    let nextCount = 1;
+    const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+
+    for (let i = 0; i < totalCells; i++) {
+      let dayNum, isOther = false, dateStr = '';
+
+      if (i < firstDay) {
+        dayNum  = daysInPrev - firstDay + i + 1;
+        isOther = true;
+        dateStr = new Date(currentYear, currentMonth - 1, dayNum).toISOString().split('T')[0];
+      } else if (dayCount <= daysInMonth) {
+        dayNum  = dayCount++;
+        dateStr = new Date(currentYear, currentMonth, dayNum).toISOString().split('T')[0];
+      } else {
+        dayNum  = nextCount++;
+        isOther = true;
+        dateStr = new Date(currentYear, currentMonth + 1, dayNum).toISOString().split('T')[0];
+      }
+
+      const isToday = !isOther &&
+        today.getDate() === dayNum &&
+        today.getMonth() === currentMonth &&
+        today.getFullYear() === currentYear;
+
+      // Filter posts for this day
+      const dayPosts = allPosts.filter(p => {
+        if (!p.scheduled_at) return false;
+        const postDate = p.scheduled_at.substring(0,10);
+        const matchBrand = activeBrand === 'all' || String(p.brand_id) === String(activeBrand);
+        return postDate === dateStr && matchBrand;
+      });
+
+      const eventsHtml = dayPosts.slice(0,3).map(p => {
+        const brand = allBrands.find(b => b.id === p.brand_id);
+        const color = brand ? brand.gradient : 'linear-gradient(135deg,#7C3AED,#EC4899)';
+        return `<div style="font-size:10px;padding:2px 6px;border-radius:4px;margin-bottom:2px;
+          white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500;
+          background:rgba(124,58,237,0.25);color:#C4B5FD;">${p.brand_name||'Post'}: ${p.platform||''}</div>`;
+      }).join('');
+
+      const more = dayPosts.length > 3
+        ? `<div style="font-size:10px;color:var(--muted);margin-top:2px;">+${dayPosts.length-3} more</div>`
+        : '';
+
+      html += `
+        <div class="cal-day ${isOther?'other-month':''} ${isToday?'today':''}"
+             onclick="openDayModal('${dateStr}', ${dayNum})">
+          <div class="cal-day-num">${dayNum}</div>
+          ${eventsHtml}${more}
+        </div>`;
+    }
+
+    document.getElementById('calDays').innerHTML = html;
+  }
+
+  // ── RENDER LIST ──
+  function renderList() {
+    let filtered = allPosts.filter(p => {
+      const matchBrand  = activeBrand === 'all' || String(p.brand_id) === String(activeBrand);
+      const matchSearch = (p.brand_name||'').toLowerCase().includes(activeSearch) ||
+                         (p.caption||'').toLowerCase().includes(activeSearch) ||
+                         (p.platform||'').toLowerCase().includes(activeSearch);
+      return matchBrand && matchSearch;
+    });
+
+    document.getElementById('listCount').textContent = `${filtered.length} posts`;
+
+    if (filtered.length === 0) {
+      document.getElementById('emptyList').style.display  = 'block';
+      document.getElementById('listTable').style.display  = 'none';
+      return;
+    }
+
+    document.getElementById('emptyList').style.display  = 'none';
+    document.getElementById('listTable').style.display  = 'table';
+
+    document.getElementById('listBody').innerHTML = filtered.map(p => `
+      <tr>
+        <td>
+          <div style="font-size:13px;font-weight:600;">${p.scheduled_at ? p.scheduled_at.substring(0,10) : '—'}</div>
+          <div style="font-size:11px;color:var(--muted);">${p.scheduled_at ? p.scheduled_at.substring(11,16) : ''}</div>
+        </td>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px;">
+            ${p.brand_name ? `
+              <div style="width:8px;height:8px;border-radius:50%;background:var(--primary);"></div>
+              <span style="font-weight:600;font-size:13px;">${p.brand_name}</span>
+            ` : '<span style="color:var(--muted);">—</span>'}
+          </div>
+        </td>
+        <td>${platformIcon(p.platform)}</td>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted);font-size:13px;">
+          ${p.caption || '—'}
+        </td>
+        <td><span class="badge badge-purple">${p.post_type||'image'}</span></td>
+        <td>${statusBadge(p.status)}</td>
+        <td>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-outline btn-sm" onclick="editPost(${p.id})">Edit</button>
+            <button class="btn btn-outline btn-sm" onclick="deletePost(${p.id})"
+              style="color:var(--danger);border-color:rgba(239,68,68,0.3);">Delete</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // ── DAY MODAL ──
+  function openDayModal(dateStr, dayNum) {
+    const dayPosts = allPosts.filter(p =>
+      p.scheduled_at && p.scheduled_at.substring(0,10) === dateStr
+    );
+
+    document.getElementById('dayModalTitle').textContent =
+      MONTHS[currentMonth] + ' ' + dayNum + ', ' + currentYear;
+
+    if (dayPosts.length === 0) {
+      document.getElementById('dayModalContent').innerHTML =
+        `<p style="text-align:center;padding:20px 0;color:var(--muted);font-size:13px;">No posts scheduled for this day.</p>`;
+    } else {
+      document.getElementById('dayModalContent').innerHTML = dayPosts.map(p => `
+        <div style="display:flex;align-items:flex-start;gap:12px;padding:12px;
+          background:rgba(255,255,255,0.03);border-radius:8px;margin-bottom:10px;
+          border-left:3px solid var(--primary);">
+          ${platformIcon(p.platform)}
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:700;margin-bottom:4px;">${p.brand_name||'Unknown Brand'}</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.5;">${p.caption||'No caption'}</div>
+            <div style="margin-top:8px;display:flex;gap:8px;align-items:center;">
+              ${statusBadge(p.status)}
+              <span style="font-size:11px;color:var(--muted);">${p.post_type||'image'}</span>
+            </div>
+          </div>
+          <button onclick="deletePost(${p.id});closeDayModal();" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:16px;">✕</button>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('dayOverlay').style.display = 'block';
+    document.getElementById('dayModal').style.display   = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDayModal() {
+    document.getElementById('dayOverlay').style.display = 'none';
+    document.getElementById('dayModal').style.display   = 'none';
+    document.body.style.overflow = '';
+  }
+
+  // ── POST MODAL ──
+  function openPostModal() {
+    document.getElementById('postOverlay').style.display = 'block';
+    document.getElementById('postModal').style.display   = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePostModal() {
+    document.getElementById('postForm').reset();
+    document.getElementById('editPostId').value           = '';
+    document.getElementById('postModalTitle').textContent = 'Schedule New Post';
+    document.getElementById('postSubmitBtn').textContent  = 'Schedule Post';
+    document.getElementById('postOverlay').style.display  = 'none';
+    document.getElementById('postModal').style.display    = 'none';
+    document.body.style.overflow = '';
+  }
+
+  // ── EDIT POST ──
+  function editPost(id) {
+    const p = allPosts.find(p => p.id === id);
+    if (!p) return;
+
+    document.getElementById('postModalTitle').textContent = 'Edit Post';
+    document.getElementById('postSubmitBtn').textContent  = 'Save Changes';
+    document.getElementById('editPostId').value           = p.id;
+    document.getElementById('postBrand').value            = p.brand_id || '';
+    document.getElementById('postPlatform').value         = p.platform || '';
+    document.getElementById('postCaption').value          = p.caption || '';
+    document.getElementById('postType').value             = p.post_type || 'image';
+    document.getElementById('postStatus').value           = p.status || 'draft';
+    document.getElementById('postAssignee').value         = p.assignee_id || '';
+
+    if (p.scheduled_at) {
+      document.getElementById('postDate').value = p.scheduled_at.substring(0,10);
+      document.getElementById('postTime').value = p.scheduled_at.substring(11,16);
+    }
+
+    openPostModal();
+  }
+
+  // ── DELETE POST ──
+  async function deletePost(id) {
+    if (!confirm('Delete this post?')) return;
+    try {
+      await fetch(`${API}/calendar/${id}`, { method: 'DELETE' });
+      loadAll();
+    } catch (err) {
+      alert('Could not delete post.');
+    }
+  }
+
+  // ── SUBMIT POST ──
+  async function submitPost(e) {
+    e.preventDefault();
+    const btn    = document.getElementById('postSubmitBtn');
+    const editId = document.getElementById('editPostId').value;
+
+    btn.textContent = 'Saving...';
+    btn.disabled    = true;
+
+    const date = document.getElementById('postDate').value;
+    const time = document.getElementById('postTime').value;
+
+    const payload = {
+      brand_id:     document.getElementById('postBrand').value || null,
+      platform:     document.getElementById('postPlatform').value,
+      caption:      document.getElementById('postCaption').value.trim(),
+      post_type:    document.getElementById('postType').value,
+      status:       document.getElementById('postStatus').value,
+      assignee_id:  document.getElementById('postAssignee').value || null,
+      scheduled_at: date && time ? `${date}T${time}:00` : null,
+    };
+
+    try {
+      const url    = editId ? `${API}/calendar/${editId}` : `${API}/calendar`;
+      const method = editId ? 'PUT' : 'POST';
+
+      const res  = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert('Error: ' + data.error);
+        btn.textContent = editId ? 'Save Changes' : 'Schedule Post';
+        btn.disabled    = false;
+        return;
+      }
+
+      btn.textContent      = '✔ Saved!';
+      btn.style.background = 'var(--success)';
+      setTimeout(() => {
+        closePostModal();
+        btn.style.background = '';
+        btn.disabled         = false;
+        loadAll();
+      }, 700);
+
+    } catch (err) {
+      alert('Could not connect to server.');
+      btn.textContent = editId ? 'Save Changes' : 'Schedule Post';
+      btn.disabled    = false;
+    }
+  }
+
+  // ── VIEW TOGGLE ──
+  function setView(view) {
+    currentView = view;
+    document.getElementById('monthView').style.display = view === 'month' ? 'block' : 'none';
+    document.getElementById('listView').style.display  = view === 'list'  ? 'block' : 'none';
+    document.getElementById('btnMonth').style.background = view === 'month' ? 'var(--gradient)' : 'transparent';
+    document.getElementById('btnMonth').style.color      = view === 'month' ? 'white' : 'var(--muted)';
+    document.getElementById('btnList').style.background  = view === 'list'  ? 'var(--gradient)' : 'transparent';
+    document.getElementById('btnList').style.color       = view === 'list'  ? 'white' : 'var(--muted)';
+    render();
+  }
+
+  // ── MONTH NAV ──
+  function changeMonth(dir) {
+    currentMonth += dir;
+    if (currentMonth > 11) { currentMonth = 0;  currentYear++; }
+    if (currentMonth < 0)  { currentMonth = 11; currentYear--; }
+    render();
+  }
+
+  function goToday() {
+    currentMonth = new Date().getMonth();
+    currentYear  = new Date().getFullYear();
+    render();
+  }
+
+  function filterByBrand(val) {
+    activeBrand = val;
+    render();
+  }
+
+  function filterPosts() {
+    activeSearch = document.getElementById('postSearch').value.toLowerCase();
+    if (currentView === 'list') renderList();
+  }
+
+  // ── INIT ──
+  loadAll();
+</script>
+
+</body>
+</html>
